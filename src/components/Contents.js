@@ -1,8 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import Ekle_Modal from "./Ekle_Modal";
 import Guncelle_Modal from "./Guncelle_Modal";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+
 
 function Contents({ urun, setUrun, active }) {
+  const MySwal = withReactContent(Swal);
   const handleDelete = (id) => {
     const deleteItem = urun.filter((el) => {
       return el.id !== id;
@@ -87,7 +92,27 @@ function Contents({ urun, setUrun, active }) {
                       active === false ? "sil-button" : "sil-button-pasif"
                     }
                     type="button"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => {
+                      Swal.fire({
+                        title: 'Silmek İstediğinize Eminmisiniz?',
+                        text: "Silme İşleminiz Geri Alınmayacaktır!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Evet,Sil!',
+                        cancelButtonText:'Vazgeç'
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          Swal.fire(
+                              'Silindi!',
+                              'Ürününüz Silinmiştir.',
+                              'success'
+                          );
+                          handleDelete(item.id);
+                        }
+                      })
+                    }}
                   >
                     Sil
                   </button>

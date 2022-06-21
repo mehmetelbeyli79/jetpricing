@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import uuid from 'react-uuid'
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 function Ekle_Modal({ urun, setUrun }) {
+  const MySwal = withReactContent(Swal);
   const [showModal, setShowModal] = useState(false);
   const [productName, setProductName] = useState();
   const [productPrice, setProductPrice] = useState();
@@ -117,7 +120,15 @@ function Ekle_Modal({ urun, setUrun }) {
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => {handleSave();setShowModal(false)}}
+                    onClick={() => {handleSave();setShowModal(false);
+                      Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Ürününüz başarıyla kaydedilmiştir.',
+                        showConfirmButton: false,
+                        timer: 2000
+                      });
+                    }}
                   >
                     Kaydet
                   </button>

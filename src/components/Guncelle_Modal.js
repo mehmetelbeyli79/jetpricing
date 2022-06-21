@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import uuid from 'react-uuid'
-function Guncelle_Modal({ item,urun,setUrun,index,active }) {
+import uuid from "react-uuid";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+function Guncelle_Modal({ item, urun, setUrun, index, active }) {
+  const MySwal1 = withReactContent(Swal);
   const [showModal, setShowModal] = useState(false);
   const [productName, setProductName] = useState();
   const [productPrice, setProductPrice] = useState();
@@ -17,31 +21,53 @@ function Guncelle_Modal({ item,urun,setUrun,index,active }) {
   const handleSave = (index) => {
     //let tumDizi=JSON.parse(localStorage.getItem("urunler"));
     //console.log(tumDizi);
-    let newDizi=urun.map((el)=>{
-      if(el.id===item.id)
-      {
-        el.urunAd=productName;
-        el.urunFiyat=productPrice;
-        el.urunStok=productStock;
-        return [...urun];
-      }
+    if(productName==='' || productStock==='' || productPrice==='')
+    {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Tüm Verileri Eksiksiz Giriniz.',
+        showConfirmButton: true,
 
-    });
-    //console.log(newDizi[index]);
-    setUrun(newDizi[index]);
-    localStorage.setItem("urunler",JSON.stringify(newDizi[index]));// Local Veritabanına kaydettik
-    setProductName("");
-    setProductPrice("");
-    setProductStock("");
+      });
+    }
+    else{
+      let newDizi = urun.map((el) => {
+        if (el.id === item.id) {
+          el.urunAd = productName;
+          el.urunFiyat = productPrice;
+          el.urunStok = productStock;
+          return [...urun];
+        }
+      });
+      //console.log(newDizi[index]);
+      setUrun(newDizi[index]);
+      localStorage.setItem("urunler", JSON.stringify(newDizi[index])); // Local Veritabanına kaydettik
+      setProductName("");
+      setProductPrice("");
+      setProductStock("");
+    }
+
   };
 
   return (
     <>
       <button
-          className={active===false ? "guncelle-button" : "guncelle-button-pasif"}
-          type="button"
-          onClick={() => {setShowModal(true);console.log(item.id)}}
-          disabled={active}
+        className={
+          active === false ? "guncelle-button" : "guncelle-button-pasif"
+        }
+        type="button"
+        onClick={() => {
+          setShowModal(true);
+          Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Lütfen Tüm Alanları Giriniz.',
+            showConfirmButton: true,
+
+          });
+        }}
+        disabled={active}
       >
         Güncelle
       </button>
@@ -77,7 +103,8 @@ function Guncelle_Modal({ item,urun,setUrun,index,active }) {
                     <tr className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
                       <td className="border-blue-200 border p-3">
                         <input
-                            placeholder={item.urunAd}
+                            required
+                          placeholder={item.urunAd}
                           name="urunAd"
                           type="text"
                           className="text-center w-full px-5 py-0 sm:py-1 sm:py-2.5 focus:outline-1 focus:outline-blue-300 "
@@ -87,7 +114,8 @@ function Guncelle_Modal({ item,urun,setUrun,index,active }) {
                       </td>
                       <td className="border-blue-200 border  p-3 truncate">
                         <input
-                            placeholder={item.urunFiyat}
+                            required
+                          placeholder={item.urunFiyat}
                           name="urunFiyat"
                           type="text"
                           className="text-center w-full px-5 py-0 sm:py-1 sm:py-2.5 focus:outline-1 focus:outline-blue-300 "
@@ -97,7 +125,8 @@ function Guncelle_Modal({ item,urun,setUrun,index,active }) {
                       </td>
                       <td className="border-blue-200 border  p-3 truncate">
                         <input
-                            placeholder={item.urunStok}
+                            required
+                          placeholder={item.urunStok}
                           name="urunStok"
                           type="text"
                           value={productStock}
@@ -119,8 +148,18 @@ function Guncelle_Modal({ item,urun,setUrun,index,active }) {
                   </button>
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => {handleSave(index);setShowModal(false)}}
+                    type="submit"
+                    onClick={() => {
+                      Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Ürününüz başarıyla güncellenmiştir.',
+                        showConfirmButton: false,
+                        timer: 2000
+                      });
+                      handleSave(index);
+                      setShowModal(false);
+                    }}
                   >
                     Güncelle
                   </button>
