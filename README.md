@@ -1,5 +1,7 @@
 # Uygulamayı aşağıdaki linkten test edebilirsiniz. 
 https://jetpricing.netlify.app/
+yada 
+https://jetpricing.vercel.app/
 
 # Getting Started with Create React App
 
